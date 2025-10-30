@@ -1,0 +1,16 @@
+---
+import '../styles/global.css';
+import VtuberChatbot from './Avatar/VtuberLive2D.js';
+
+---
+<html>
+  <head>
+      <script is:inline src="/webpack/live2d.min.js"></script>
+      <script is:inline src="/webpack/live2dcubismcore.js"></script>
+  </head>
+  <body>
+      <div class="flex justify-center">
+        <VtuberChatbot client:only="react" />
+      </div>
+  </body>
+</html>
