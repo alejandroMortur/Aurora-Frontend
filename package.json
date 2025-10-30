@@ -6,7 +6,22 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    
+    "tsc": "tsc",
+    "tsc:watch": "tsc --watch",
+    "tsc:check": "tsc --noEmit",
+
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+
+    "tailwind:build": "tailwindcss -i ./src/styles/tailwind.css -o ./dist/output.css",
+    "tailwind:watch": "tailwindcss -i ./src/styles/tailwind.css -o ./dist/output.css --watch",
+
+    "postcss": "postcss src/styles.css -o dist/styles.css"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.1",
