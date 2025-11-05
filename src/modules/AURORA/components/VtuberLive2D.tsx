@@ -10,6 +10,12 @@ import { useAuroraState } from "../hook/useAuroraState";
 import { AuroraChatFrame } from "./AuroraChatFrame";
 import { AuroraVoiceLocal } from "../core/AuroraVoice";
 
+// Main component that mounts a PIXI canvas and loads a Live2D model.
+// Responsibilities:
+// - Initialize the PIXI application and the Live2D model.
+// - Map audio input (visemes) to the model's mouth parameters.
+// - Apply expressions and motions coming from Aurora's state.
+// - Provide debug helpers to play motions/expressions manually.
 const VtuberLive2D: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement | null>(null);
   const modelRef = useRef<Live2DModel | null>(null);
@@ -51,22 +57,25 @@ const VtuberLive2D: React.FC = () => {
             model.internalModel.expressionManager.setExpression(null);
           }
 
-          // Intento de descubrimiento de parámetros (útil para debugging de visemas)
+          // Attempt to discover model parameters to help debug viseme
+          // mapping (mouth parameters). This is non-critical: some models
+          // don't expose `coreModel` or use vendor-specific structures.
           try {
-            // muchos modelos Live2D exponen una API coreModel con parámetros
+            // Many Live2D models expose a `coreModel` API with parameter info
             const core = (model.internalModel.coreModel as any) || {};
             const paramNames = core.getParameterIds?.() || core.parameters?.map((p: any) => p.id) || [];
             if (paramNames && paramNames.length) {
               console.log("🧭 Parámetros del modelo detectados:", paramNames.slice(0, 30));
             }
           } catch (pm) {
-            // no crítico
+            // If inspection fails, continue without blocking the load.
           }
         } catch (e) {}
         console.log("✅ Modelo totalmente cargado y listo.");
       });
 
-  // registrar ticker (necesario) — usar la clase Ticker desde @pixi/ticker
+  // Register the Ticker class required by pixi-live2d-display.
+  // This makes sure the Live2D runtime receives regular time updates.
   Live2DModel.registerTicker(Ticker);
 
       app.stage.addChild(model);
@@ -77,41 +86,42 @@ const VtuberLive2D: React.FC = () => {
       model.x = app.renderer.width / 2 - model.width / 2;
       model.y = app.renderer.height / 2 - model.height / 2 + 490;
 
-      // lip-sync: conectar callback estimado
-      // Strategy:
-      // - AuroraVoiceLocal nos da valores 0..1. Mapeamos y escribimos en el parámetro de boca
-      // - Intentamos varios nombres de parámetro comunes y hacemos fallback
+      // Lip-sync setup: receive estimated audio-frame values and map them
+      // to the model's mouth parameter(s). We try several common parameter
+      // ids and fall back to alternative parameter APIs when needed.
       const mouthCandidates = ["ParamMouthOpenY", "ParamMouthOpen", "ParamMouthOpenX", "MouthOpen"];
       const setMouthValue = (val: number) => {
         const m = modelRef.current;
         if (!m) return;
         const clamped = Math.max(0, Math.min(1, val));
-        // Escala ligera si hace falta (algunos modelos esperan 0..0.6)
+
+        // Slight scaling because some models expect smaller ranges (e.g. 0..0.6)
         const scaled = clamped * 0.9;
 
         for (const id of mouthCandidates) {
           try {
-            // API preferida: coreModel.setParameterValueById
+            // Preferred API: coreModel.setParameterValueById
             const core: any = m.internalModel.coreModel;
             if (core && typeof core.setParameterValueById === "function") {
               core.setParameterValueById(id, scaled);
               return;
             }
-            // fallback a parámetros expuestos
+            // Fallback to exposed `parameters` APIs
             const params: any = (m.internalModel.parameters as any) || (m.internalModel.coreModel && (m.internalModel.coreModel as any).parameters);
             if (params && typeof params.setValueById === "function") {
               params.setValueById(id, scaled);
               return;
             }
           } catch (e) {
-            // intentar siguiente candidate
+            // Try next candidate on error
           }
         }
-        // Si no funcionó con los ids, intentar escribir directamente si existe un objeto de parámetros
+        // If no candidate IDs worked, try to find any parameter whose id
+        // contains 'mouth' and set that value directly.
         try {
           const coreAny: any = m.internalModel.coreModel;
           if (coreAny && coreAny.parameters) {
-            // intentar buscar un parámetro que contenga "mouth"
+            // attempt to find a parameter that contains "mouth" in its id
             const found = coreAny.parameters.find((p: any) => /mouth/i.test(p.id));
             if (found && typeof coreAny.setParameterValueById === "function") {
               coreAny.setParameterValueById(found.id, scaled);
@@ -124,16 +134,19 @@ const VtuberLive2D: React.FC = () => {
         voiceRef.current.setOnAudioFrameCallback((v) => setMouthValue(v));
       }
 
-      // Fallback: escuchar evento global por si otra parte del código dispatcha visemas
+      // Fallback: listen for a global event if other parts of the app
+      // dispatch viseme values. Expect a CustomEvent 'aurora-lipsync' with a
+      // numeric `detail` (0..1).
       const onWindowLip = (e: Event) => {
         const detail: any = (e as CustomEvent).detail;
         if (typeof detail === "number") setMouthValue(detail);
       };
       window.addEventListener("aurora-lipsync", onWindowLip as EventListener);
 
-      // opcional: añadir imagen de fondo (ejemplo). Si no existe, no rompe.
+      // Optional: try to add a background image for the canvas. If the asset
+      // is missing, catch the error and continue without a background.
       try {
-        const bgPath = "/img/frame-background.png"; // cambiar o parametrizar según tus assets
+        const bgPath = "/img/frame-background.png"; // change or parametrize as needed
         const sprite = PIXI.Sprite.from(bgPath);
         sprite.zIndex = 0;
         sprite.width = app.renderer.width;
@@ -141,12 +154,14 @@ const VtuberLive2D: React.FC = () => {
         sprite.alpha = 0.6;
         app.stage.addChildAt(sprite, 0);
       } catch (e) {
-        // no crítico si la imagen no está presente
+        // Non-critical if background asset is missing
       }
 
       // remove listener on cleanup (handled below in return)
 
-      // ticker backup (Live2DModel.registerTicker debería hacerlo, pero dejamos update por seguridad)
+      // Ticker backup: ensure the model receives update calls. The registered
+      // ticker normally handles updates, but this guarantees `model.update`
+      // is called in environments where automatic updates may not run.
       app.ticker.add((delta) => {
         if (model && typeof (model as any).update === "function") {
           (model as any).update(delta * app!.ticker.deltaMS);
@@ -159,6 +174,8 @@ const VtuberLive2D: React.FC = () => {
     init();
 
     return () => {
+      // Cleanup: remove listeners and destroy PIXI/Live2D instances to free
+      // memory and stop animations when the component unmounts.
       console.log("🧹 Destruyendo aplicación PIXI...");
       try {
         window.removeEventListener("aurora-lipsync", () => {});
@@ -168,7 +185,7 @@ const VtuberLive2D: React.FC = () => {
     };
   }, []);
 
-  // Expresiones
+  // Expressions
   useEffect(() => {
     const m = modelRef.current;
     if (!m || !expression) return;
@@ -193,13 +210,14 @@ const VtuberLive2D: React.FC = () => {
     updateFromResponse(instruction);
     applyAuroraInstruction(modelRef, instruction);
 
-    // además pide voz
+    // Also request local voice output so the avatar speaks. Uses optional
+    // emotion and pitch parameters.
     if (voiceRef.current) {
       voiceRef.current.speak(instruction?.text ?? instruction?.response ?? "Te escucho, cariño~", { emotion: "sweet", pitch: 1.2 });
     }
   };
 
-  // panel debug
+  // Debug panel
   const playMotion = (name: string) => {
     const m = modelRef.current;
     if (!m) return;
