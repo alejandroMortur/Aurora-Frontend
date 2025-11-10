@@ -16,6 +16,8 @@ import { AuroraVoiceLocal } from "../core/AuroraVoice";
 // - Map audio input (visemes) to the model's mouth parameters.
 // - Apply expressions and motions coming from Aurora's state.
 // - Provide debug helpers to play motions/expressions manually.
+// Este componente se puede usar como hijo en un popup React
+// No se renderiza hasta que el padre lo monte
 const VtuberLive2D: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement | null>(null);
   const modelRef = useRef<Live2DModel | null>(null);
