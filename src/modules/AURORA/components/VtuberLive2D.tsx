@@ -25,7 +25,7 @@ const VtuberLive2D: React.FC = () => {
   const voiceRef = useRef<AuroraVoiceLocal | null>(null);
 
   const maxWidth = 500;
-  const maxHeight = 1200;
+  const maxHeight = 800;
 
   useEffect(() => {
     voiceRef.current = new AuroraVoiceLocal();
@@ -86,7 +86,7 @@ const VtuberLive2D: React.FC = () => {
       model.interactive = false;
       model.scale.set(0.35);
       model.x = app.renderer.width / 2 - model.width / 2;
-      model.y = app.renderer.height / 2 - model.height / 2 + 490;
+      model.y = app.renderer.height / 2 - model.height / 2 + 360;
 
       // Lip-sync setup: receive estimated audio-frame values and map them
       // to the model's mouth parameter(s). We try several common parameter
@@ -238,17 +238,6 @@ const VtuberLive2D: React.FC = () => {
   return (
     <div className="relative flex flex-col items-center">
       <div ref={canvasRef} style={{ width: maxWidth, height: maxHeight }} />
-
-      <div className="absolute top-2 right-2 z-50 bg-black/40 backdrop-blur-md p-3 rounded-xl text-white text-sm space-y-2 pointer-events-auto">
-        <p className="font-bold text-pink-300 text-center">🎭 Animaciones</p>
-
-        <button onClick={() => playMotion("haru_g_idle")} className="bg-pink-600 hover:bg-pink-700 px-2 py-1 rounded">Idle</button>
-        <button onClick={() => playMotion("haru_g_m01")} className="bg-pink-600 hover:bg-pink-700 px-2 py-1 rounded">Motion 1</button>
-
-        <p className="font-bold text-pink-300 text-center mt-2">😊 Expresiones</p>
-        <button onClick={() => playExpression("neutral")} className="bg-purple-600 hover:bg-purple-700 px-2 py-1 rounded">Neutral</button>
-        <button onClick={() => playExpression("smile")} className="bg-purple-600 hover:bg-purple-700 px-2 py-1 rounded">Sonrisa 😊</button>
-      </div>
 
       <div className="absolute bottom-0 left-0 w-full flex justify-center z-50 pointer-events-auto pb-0">
         <AuroraChatFrame onSend={handleMessage} />

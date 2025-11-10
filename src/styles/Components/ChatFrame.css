@@ -4,3 +4,12 @@
     background-size: cover;
     border: 2px solid black;
 }
+
+.cabecera{
+    color: white;
+    background-color: rgba(219, 39, 119, 0.7);   
+}
+
+.icono{
+    background-color: rgba(219, 39, 119, 0.7);   
+}
