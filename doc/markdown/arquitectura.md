@@ -67,15 +67,10 @@ A.N.A. es el **alma emocional** de la IA: la responsable de que sus respuestas s
 | **L.U.C.I.A.** | Comprensión e interfaz accesible | Cognitivo / Lingüístico | Comunica la IA con el usuario |
 | **A.N.A.** | Análisis y regulación emocional | Afectivo / Adaptativo | Equilibra las emociones del sistema |
 
----
-
-### 💫 Filosofía del Sistema
-
 > “La razón guía, la gestión equilibra y la emoción conecta.”  
 >  
 > Este tríptico de módulos conforma una IA con **mente, cuerpo y alma**, capaz de pensar con precisión, actuar con coherencia y sentir con empatía.
 
-### Estructura del proyecto
 
 ```
 📦 Aurora/
@@ -85,17 +80,12 @@ A.N.A. es el **alma emocional** de la IA: la responsable de que sus respuestas s
 │   └── 🗂️ pdf/              
 │
 ├── 📁 public/
-│   ├── 🖼️ assets/              # Imágenes, logos, íconos estáticos
 │   ├── 🗂️ modelos/             # Modelos 3D, animaciones, etc.
 │   └── 📄 favicon.svg
 │
 ├── 📁 src/
 │   ├── 📁 components/          # Componentes reutilizables
-│   │   ├── ui/                 # Botones, inputs, modales, loaders...
-│   │   ├── layout/             # Cabecera, menú, pie, sidebar...
-│   │   └── product/            # Tarjetas, galerías, reseñas...
 │   │
-│   ├── 📁 pages/               # Páginas principales del e-commerce
 │   │   ├── index.astro         # Página principal
 │   │   ├── productos.astro
 │   │   ├── contacto.astro
@@ -103,23 +93,15 @@ A.N.A. es el **alma emocional** de la IA: la responsable de que sus respuestas s
 │   │
 │   ├── 📁 modules/             # 🌐 Aquí viven tus módulos inteligentes
 │   │   ├── LUCIA/              # Lógica Unificada de Comprensión e Interfaz Accesible
-│   │   │   ├── core.ts         # Núcleo lógico (parsing, detección, comandos)
 │   │   │   ├── interface.ts    # Comunicación entre usuario ↔ IA ↔ front
 │   │   │   └── index.ts
 │   │   │
 │   │   ├── MARIA/              # Módulo Administrador y Redireccionador Interno de Aplicación
-│   │   │   ├── routes.ts       # Gestión dinámica de rutas y navegación
 │   │   │   ├── context.ts      # Estado global de la app y sesiones
 │   │   │   └── index.ts
 │   │   │
-│   │   └── ANA/                # Analizador de Niveles Afectivos 💗
 │   │       ├── detector.ts     # Detección emocional (texto, voz, patrones)
 │   │       ├── manager.ts      # Control y ajuste de estados emocionales
-│   │       ├── data/           # Diccionarios, perfiles emocionales, datasets
-│   │       └── index.ts
-│   │
-│   ├── 📁 services/            # Conexión con APIs (backend, IA, pasarelas de pago)
-│   │   ├── apiClient.ts
 │   │   ├── paymentService.ts
 │   │   └── productService.ts
 │   │
