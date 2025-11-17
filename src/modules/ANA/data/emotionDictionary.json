@@ -1,0 +1,38 @@
+[
+  {
+    "emotion": "happy",
+    "expression": "smile",
+    "motion": "/models/haru/runtime/motion/haru_g_m01.motion3.json",
+    "keywords": ["feliz", "contento", "genial", "bien", "alegre"]
+  },
+  {
+    "emotion": "sad",
+    "expression": "sad",
+    "motion": "/models/haru/runtime/motion/haru_g_m05.motion3.json",
+    "keywords": ["triste", "mal", "deprimido", "desanimado"]
+  },
+  {
+    "emotion": "angry",
+    "expression": "angry",
+    "motion": "/models/haru/runtime/motion/haru_g_m10.motion3.json",
+    "keywords": ["enfadado", "ira", "furioso", "molesto"]
+  },
+  {
+    "emotion": "surprised",
+    "expression": "surprised",
+    "motion": "/models/haru/runtime/motion/haru_g_m14.motion3.json",
+    "keywords": ["sorprendido", "wow", "asombroso", "no esperaba"]
+  },
+  {
+    "emotion": "thinking",
+    "expression": "thinking",
+    "motion": "/models/haru/runtime/motion/haru_g_m08.motion3.json",
+    "keywords": ["pienso", "reflexiono", "creo que", "tal vez"]
+  },
+  {
+    "emotion": "neutral",
+    "expression": "neutral",
+    "motion": "/models/haru/runtime/motion/haru_g_idle.motion3.json",
+    "keywords": []
+  }
+]

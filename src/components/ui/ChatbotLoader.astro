@@ -1,6 +1,7 @@
 ---
-import '../styles/global.css';
-import VtuberChatbot from './Avatar/VtuberLive2D.js';
+import '@/styles/global.css';
+import '@/styles/Components/ChatFrame.css';
+import ChatWrapper from '@/modules/AURORA/components/ChatWrapper';
 
 ---
 <html>
@@ -10,7 +11,7 @@ import VtuberChatbot from './Avatar/VtuberLive2D.js';
   </head>
   <body>
       <div class="flex justify-center">
-        <VtuberChatbot client:only="react" />
+        <ChatWrapper client:only="react" />
       </div>
   </body>
 </html>
