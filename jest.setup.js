@@ -1,6 +1,9 @@
 /* eslint-disable */
 // jest.setup.js - Configuración global de Jest
 
+// Importar matchers de Testing Library
+require('@testing-library/jest-dom');
+
 // Mock de SpeechSynthesis para tests
 globalThis.speechSynthesis = {
   getVoices: () => [
