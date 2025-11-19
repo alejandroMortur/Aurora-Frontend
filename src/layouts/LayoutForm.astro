@@ -1,6 +1,5 @@
 ---
-import Header from "@/components/layout/Header.astro";
-import Footer from "@/components/layout/Footer.astro";
+import ThemeToggle from "@/components/tsx/ThemeToggle/ThemeToggle";
 
 // src/layouts/Layout.astro
 const { lang, title, metaTitle, metaDescription, canonicalUrl, previewImage } = Astro.props;
@@ -52,12 +51,14 @@ const { lang, title, metaTitle, metaDescription, canonicalUrl, previewImage } = 
       })();
     </script>
   </head>
-  <body
-    class="bg-sky-50 dark:bg-slate-800 text-slate-900 dark:text-slate-50 transition-colors duration-300 h-fit"
-  >
-    <Header cartCount={3} lang={lang} />
-    <slot />
-    <Footer lang={lang} />
+  <body class="bg-sky-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-300">
+    <div class="p-4 flex justify-end flex-shrink-0">
+      <ThemeToggle client:load />
+    </div>
+    <main class="flex-1 flex flex-col">
+      <slot />
+    </main>
+    <!-- ✅ Este script carga tu main.ts en el cliente -->
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
