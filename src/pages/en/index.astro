@@ -1,0 +1,20 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import ChatbotLoader from '@/components/ui/ChatbotLoader.astro';
+import LoginForm from '@/components/tsx/LoginForm/LoginForm.astro';
+import PayPalCheckout from '@/components/tsx/PayPalCheckout/PayPalCheckout.astro';
+---
+
+<Layout
+  lang="en"
+  title="Aurora Chat - English"
+  description="AI chat platform in English"
+  canonicalUrl="https://miweb.com/en/"
+  previewImage="/assets/preview.png"
+>
+  <ChatbotLoader />
+  <LoginForm /> 
+  <PayPalCheckout/>
+</Layout>
+
+

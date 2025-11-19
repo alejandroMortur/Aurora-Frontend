@@ -1,0 +1,328 @@
+---
+import ThemeToggle from "../tsx/ThemeToggle/ThemeToggle";
+const { cartCount = 0, lang } = Astro.props;
+---
+
+<link rel="stylesheet" href="/src/styles/Components/Header.css" />
+
+  <header class="w-full bg-slate-900 dark:bg-slate-950 text-white dark:text-slate-50 border-b border-sky-100 dark:border-slate-700 shadow-md transition-colors duration-300">
+  
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+    <!-- LOGO -->
+    <a
+      href="/"
+      class="flex items-center gap-2 font-bold text-xl tracking-wide hover:opacity-80 transition"
+    >
+      <img src="/assets/icon.png" alt="Logo" class="w-16 sm:w-20 h-16 sm:h-20 rounded-full" />
+      <span>Hcc Shop</span>
+    </a>
+
+    <!-- DESKTOP MENU E ICONOS -->
+    <div class="hidden md:flex items-center gap-6">
+      <nav class="flex gap-6 text-sm">
+        <a href={`/${lang}/products/allproducts`} class="hover:text-red-400 transition">Productos</a
+        >
+        <a href={`/${lang}/products/offer`} class="hover:text-red-400 transition">Ofertas</a>
+      </nav>
+
+      <div class="flex items-center gap-4">
+        <!-- Buscador -->
+        <div
+          class="flex items-center gap-2 border border-slate-300 bg-slate-900 dark:border-slate-600 rounded overflow-hidden bg-slate-200 dark:bg-slate-800 px-2 py-1 transition-colors duration-300"
+        >
+          <button aria-label="Buscar" class="hover:opacity-75 transition flex-shrink-0">
+            <img
+              src="/assets/Icons/dark/search.png"
+              class="w-8 h-8 dark:hidden"
+              alt="search light"
+            />
+            <img
+              src="/assets/Icons/dark/search.png"
+              class="w-8 h-8 hidden dark:block"
+              alt="search dark"
+            />
+          </button>
+          <input
+            type="text"
+            placeholder="Buscar Categorias"
+            class="flex-1 bg-transparent text-white dark:text-slate-100 dark:placeholder-slate-400 focus:outline-none px-2 py-1 text-sm transition-colors duration-300"
+          />
+        </div>
+
+        <!-- Cuenta -->
+        <div class="relative">
+          <button id="account-toggle" aria-label="Cuenta" class="hover:opacity-75 transition">
+            <img
+              src="/assets/Icons/dark/account.png"
+              class="w-10 h-10 dark:hidden rounded-full"
+              alt="account light"
+            />
+            <img
+              src="/assets/Icons/dark/account.png"
+              class="w-10 h-10 hidden dark:block rounded-full"
+              alt="account dark"
+            />
+          </button>
+          <div
+            id="account-menu"
+            class="hidden absolute right-0 mt-2 w-48 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg z-50 bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
+          >
+            <a
+              href={`/${lang}/acount/profile`}
+              class="block px-4 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
+              >Perfil</a
+            >
+            <hr class="border-t border-slate-200 dark:border-slate-700 my-1" />
+            <a
+              href={`/${lang}/acount/logout`}
+              class="block px-4 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
+              >Cerrar Sesión</a
+            >
+          </div>
+        </div>
+
+        <!-- Carrito -->
+        <div class="relative">
+          <button
+            id="cart-toggle"
+            aria-label="Carrito"
+            class="hover:opacity-75 transition relative"
+          >
+            <img src="/assets/Icons/dark/cart.png" class="w-10 h-10 dark:hidden" alt="cart light" />
+            <img
+              src="/assets/Icons/dark/cart.png"
+              class="w-10 h-10 hidden dark:block"
+              alt="cart dark"
+            />
+            {
+              cartCount > 0 && (
+                <span class="absolute -top-2 -right-2 bg-red-600 dark:bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                  {cartCount}
+                </span>
+              )
+            }
+          </button>
+          <div
+            id="cart-menu"
+            class="hidden absolute right-0 mt-2 w-64 bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg z-50 bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
+          >
+            <p class="px-4 py-2 dark:text-slate-100">Tu carrito tiene {cartCount} artículo(s)</p>
+            <hr class="border-t border-slate-300 dark:border-slate-600 my-1" />
+            <a
+              href={`/${lang}/products/cart`}
+              class="block px-4 hover:bg-slate-800 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
+              >Ver carrito</a
+            >
+            <hr class="border-t border-slate-300 dark:border-slate-600 my-1" />
+            <a
+              href={`/${lang}/products/checkout`}
+              class="block px-4 hover:bg-slate-800 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
+              >Finalizar compra</a
+            >
+          </div>
+        </div>
+
+        <!-- Theme toggle -->
+        <ThemeToggle client:load id="theme-toggle" />
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4 md:hidden">
+      <ThemeToggle client:load id="theme-toggle" />
+      <!-- BOTÓN MENÚ MÓVIL -->
+      <button id="mobile-toggle" class="text-2xl" aria-label="Abrir menú">☰</button>
+    </div>
+  </div>
+
+  <!-- MENÚ MÓVIL COMPLETO -->
+  <nav
+    id="mobile-menu"
+    class="md:hidden hidden flex-col gap-4 px-4 py-4 bg-slate-900 text-white border-sky-100 dark:border-slate-600 border-t bg-sky-50 dark:bg-slate-950 transition-colors duration-300"
+  >
+    <div class="flex items-center gap-4">
+      <p class=" dark:text-slate-100">Enlaces rapidos:</p>
+      <a
+        href={`/${lang}/products/allproducts`}
+        class=" dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition py-2"
+      >
+        Productos
+      </a>
+      <a
+        href={`/${lang}/products/offer`}
+        class=" dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition py-2"
+      >
+        Ofertas
+      </a>
+    </div>
+
+    <!-- Buscador -->
+    <div
+      class="flex items-center gap-2 border bg-slate-900 border-slate-300 dark:border-slate-600 rounded overflow-hidden px-2 py-1 mt-2 bg-slate-200 dark:bg-slate-800 transition-colors duration-300"
+    >
+      <button aria-label="Buscar" class="hover:opacity-75 transition flex-shrink-0">
+        <img src="/assets/Icons/dark/search.png" class="w-8 h-8 dark:hidden" alt="search light" />
+        <img
+          src="/assets/Icons/dark/search.png"
+          class="w-8 h-8 hidden dark:block"
+          alt="search dark"
+        />
+      </button>
+      <input
+        type="text"
+        placeholder="Buscar Categorias"
+        class="flex-1 bg-transparent  dark:text-slate-100 dark:placeholder-slate-400 focus:outline-none px-2 py-1 text-sm"
+      />
+    </div>
+
+    <!-- Cuenta móvil -->
+    <div class="relative mt-2">
+      <button
+        id="account-toggle-mobile"
+        aria-label="Cuenta"
+        class="hover:opacity-75 bg-slate-900 transition w-full text-left py-2 px-2 border border-slate-300 dark:border-slate-600 rounded dark:text-slate-100"
+      >
+        Cuenta
+      </button>
+      <div
+        id="account-menu-mobile"
+        class="hidden mt-1 w-full border border-slate-300 bg-slate-900 dark:border-slate-600 rounded-md shadow-lg z-50 bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
+      >
+        <a
+          href={`/${lang}/acount/profile`}
+          class="block px-4 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
+          >Perfil</a
+        >
+        <hr class="border-t border-slate-300 dark:border-slate-600 my-1" />
+        <a
+          href={`/${lang}/acount/logout`}
+          class="block px-4 py-2  dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
+          >Cerrar Sesión</a
+        >
+      </div>
+    </div>
+
+    <!-- Carrito móvil -->
+    <div class="relative mt-2">
+      <button
+        id="cart-toggle-mobile"
+        aria-label="Carrito"
+        class="hover:opacity-75 transition w-full text-left py-2 px-2 border border-slate-300 dark:border-slate-600 rounded text-white bg-slate-900 dark:text-slate-100"
+      >
+        Carrito ({cartCount})
+      </button>
+      <div
+        id="cart-menu-mobile"
+        class="hidden mt-1 w-full border border-slate-300 bg-slate-900 dark:border-slate-600 rounded-md shadow-lg z-50 bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
+      >
+        <p class="px-4 py-2 dark:text-slate-100">
+          Tu carrito tiene {cartCount} artículo(s)
+        </p>
+        <hr class="border-t border-slate-300 dark:border-slate-600 my-1" />
+        <a
+          href={`/${lang}/products/cart`}
+          class="block px-4 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
+          >Ver carrito</a
+        >
+        <hr class="border-t border-slate-300 dark:border-slate-600 my-1" />
+        <a
+          href={`/${lang}/products/checkout`}
+          class="block px-4 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
+          >Finalizar compra</a
+        >
+      </div>
+    </div>
+  </nav>
+
+  <!-- SCRIPT -->
+  <script is:inline>
+    const lang = document.documentElement.lang || 'es';
+
+    // Menú móvil
+    const mobileToggle = document.getElementById("mobile-toggle");
+    const mobileMenu = document.getElementById("mobile-menu");
+    mobileToggle?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      mobileMenu.classList.toggle("hidden");
+    });
+
+    // Dropdown desktop
+    const accountToggle = document.getElementById("account-toggle");
+    const accountMenu = document.getElementById("account-menu");
+    accountToggle?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (localStorage.getItem("login") !== "true") {
+        window.location.href = `/${lang}/acount/login`;
+      } else {
+        accountMenu.classList.toggle("hidden");
+      }
+    });
+
+    const cartToggle = document.getElementById("cart-toggle");
+    const cartMenu = document.getElementById("cart-menu");
+    cartToggle?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      cartMenu.classList.toggle("hidden");
+    });
+
+    // Dropdown móvil
+    const accountToggleMobile = document.getElementById("account-toggle-mobile");
+    const accountMenuMobile = document.getElementById("account-menu-mobile");
+    accountToggleMobile?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (localStorage.getItem("login") !== "true") {
+        window.location.href = `/${lang}/acount/login`;
+      } else {
+        accountMenuMobile.classList.toggle("hidden");
+      }
+    });
+
+    const cartToggleMobile = document.getElementById("cart-toggle-mobile");
+    const cartMenuMobile = document.getElementById("cart-menu-mobile");
+    cartToggleMobile?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      cartMenuMobile.classList.toggle("hidden");
+    });
+
+    // Cerrar solo el dropdown al hacer click en un enlace dentro del menú móvil
+    const accountLinksM = accountMenuMobile?.querySelectorAll("a");
+    accountLinksM?.forEach((link) => {
+      link.addEventListener("click", () => {
+        accountMenuMobile?.classList.add("hidden");
+      });
+    });
+
+    const cartLinksM = cartMenuMobile?.querySelectorAll("a");
+    cartLinksM?.forEach((link) => {
+      link.addEventListener("click", () => {
+        cartMenuMobile?.classList.add("hidden");
+      });
+    });
+
+    // Cerrar menús solo si el click es fuera
+    document.addEventListener("click", (e) => {
+      const target = e.target;
+
+      // === NO cerrar si toca buscador móvil o desktop ===
+      if (target.closest("input") || target.closest("button[aria-label='Buscar']")) {
+        return;
+      }
+
+      // === NO cerrar si toca ThemeToggle ===
+      if (target.closest("#theme-toggle") || target.closest(".theme-toggle")) {
+        return;
+      }
+
+      // === NO cerrar si toca el header completo ===
+      if (target.closest("header")) {
+        return;
+      }
+
+      // === SI llega aquí, cerrar todos los menús ===
+      accountMenu?.classList.add("hidden");
+      cartMenu?.classList.add("hidden");
+      accountMenuMobile?.classList.add("hidden");
+      cartMenuMobile?.classList.add("hidden");
+      mobileMenu?.classList.add("hidden");
+    });
+  </script>
+</header>
