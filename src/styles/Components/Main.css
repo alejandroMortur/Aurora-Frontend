@@ -1,0 +1,30 @@
+/* Fondo y texto principal - Adaptado a Tailwind */
+body {
+  font-family: sans-serif;
+}
+
+/* Tarjetas / contenedores */
+.card {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark .card {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Botones principales */
+.button-primary {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+}
+
+/* Botones secundarios */
+.button-secondary {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+}

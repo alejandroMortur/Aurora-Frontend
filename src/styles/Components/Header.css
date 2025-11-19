@@ -1,0 +1,56 @@
+/* ======================================================== */
+/*                 HEADER DARK MODE READY                  */
+/* ======================================================== */
+
+/* Transiciones suaves para todos los elementos */
+header {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+header * {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Logo e imágenes */
+header a img {
+  transition: opacity 0.2s ease;
+}
+
+header a:hover img {
+  opacity: 0.85;
+}
+
+/* Iconos principales */
+header .relative img {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+header .relative:hover img {
+  opacity: 0.8;
+  transform: scale(1.06);
+}
+
+/* Input placeholders */
+header input::placeholder {
+  transition: color 0.3s ease;
+}
+
+/* Botones con hover */
+header button:hover img {
+  opacity: 0.8;
+}
+
+/* ======================================================== */
+/*                   RESPONSIVE AJUSTES                     */
+/* ======================================================== */
+
+@media (max-width: 768px) {
+  header {
+    padding-bottom: 0.6rem;
+  }
+
+  #account-menu-mobile,
+  #cart-menu-mobile {
+    width: 100%;
+  }
+}
