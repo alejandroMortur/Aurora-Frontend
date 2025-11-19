@@ -1,5 +1,4 @@
 // src/config.ts
-
 function getEnvVariable(name: keyof ImportMetaEnv, defaultValue?: string): string {
   const value = import.meta.env[name]
   if (!value) {
@@ -12,7 +11,6 @@ function getEnvVariable(name: keyof ImportMetaEnv, defaultValue?: string): strin
 export const ENV = {
   // API
   API_URL: getEnvVariable('PUBLIC_API_URL'),
-  IA_API_URL: getEnvVariable('PUBLIC_IA_API_URL'),
 
   // Servicios de IA
   LUCIA_API_KEY: getEnvVariable('PUBLIC_LUCIA_API_KEY'),
