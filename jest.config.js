@@ -1,3 +1,11 @@
+/**
+ * jest.config.js
+ * Purpose: Jest configuration for the repository. Uses `ts-jest` preset
+ * and `jsdom` test environment so TypeScript React components can be
+ * tested. The config maps `@/` imports to `src/` and loads the
+ * global `jest.setup.js` file after environment setup.
+ */
+
 export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',

@@ -1,5 +1,10 @@
 /* eslint-disable */
-// jest.setup.js - Configuración global de Jest
+/**
+ * jest.setup.js
+ * Purpose: Global Jest setup script executed before tests. It registers
+ * common mocks (SpeechSynthesis, fetch) and installs `@testing-library/jest-dom`
+ * matchers so tests can use extended DOM assertions.
+ */
 
 // Importar matchers de Testing Library
 require('@testing-library/jest-dom');
