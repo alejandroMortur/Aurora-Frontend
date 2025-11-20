@@ -1,34 +1,80 @@
 ---
+/**
+ * Header Component - Navigation and Branding
+ * 
+ * Main application header with responsive navigation, search, cart, and user menu.
+ * Includes desktop and mobile versions with proper accessibility attributes.
+ * 
+ * Features:
+ * - Logo and branding with link to home
+ * - Navigation links (Home, Products, Offers) - conditionally shown based on `home` prop
+ * - Search bar (desktop and mobile versions)
+ * - Account dropdown menu (redirects to login if not authenticated)
+ * - Shopping cart button with item count badge
+ * - Theme toggle (light/dark mode)
+ * - Responsive design (hidden on mobile, hamburger menu)
+ * - Dark mode support with Tailwind classes
+ * - Click-outside detection to close dropdowns
+ * 
+ * Props:
+ * - cartCount: Number of items in cart (default: 0)
+ * - lang: Current language (en or es) for navigation URLs
+ * - home: Boolean to show/hide home link
+ * 
+ * Structure:
+ * 1. Desktop header with flex layout
+ * 2. Logo and brand name
+ * 3. Desktop navigation menu
+ * 4. Search bar with icon toggle
+ * 5. Account menu dropdown (toggles on click)
+ * 6. Cart menu dropdown with quick links
+ * 7. Theme toggle component
+ * 8. Mobile hamburger menu (visible only on small screens)
+ * 9. Mobile dropdown menus (Account, Cart)
+ * 10. Inline script for dropdown toggle behavior
+ */
+
+import AccountMenu from "../tsx/AccountMenu/AccountMenu";
 import ThemeToggle from "../tsx/ThemeToggle/ThemeToggle";
-const { cartCount = 0, lang } = Astro.props;
+const { cartCount = 0, lang, home } = Astro.props;
 ---
 
 <link rel="stylesheet" href="/src/styles/Components/Header.css" />
 
-  <header class="w-full bg-slate-900 dark:bg-slate-950 text-white dark:text-slate-50 border-b border-sky-100 dark:border-slate-700 shadow-md transition-colors duration-300">
-  
+<header
+  class="w-full bg-slate-900 dark:bg-slate-950 text-white dark:text-slate-50 border-b border-sky-100 dark:border-slate-700 shadow-md transition-colors duration-300"
+>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-    <!-- LOGO -->
+    <!-- LOGO SECTION -->
     <a
       href="/"
       class="flex items-center gap-2 font-bold text-xl tracking-wide hover:opacity-80 transition"
+      aria-label="Aurora Shop Home"
     >
-      <img src="/assets/icon.png" alt="Logo" class="w-16 sm:w-20 h-16 sm:h-20 rounded-full" />
+      <img src="/assets/icon.png" alt="Aurora Shop Logo" class="w-16 sm:w-20 h-16 sm:h-20 rounded-full" />
       <span>Hcc Shop</span>
     </a>
 
-    <!-- DESKTOP MENU E ICONOS -->
+    <!-- DESKTOP NAVIGATION & ICONS (hidden on mobile, shown on md+) -->
     <div class="hidden md:flex items-center gap-6">
+      {/* Main navigation links */}
       <nav class="flex gap-6 text-sm">
-        <a href={`/${lang}/products/allproducts`} class="hover:text-red-400 transition">Productos</a
-        >
+        {
+          home && (
+            <a href={`/${lang}/`} class="hover:text-red-400 transition">
+              Inicio
+            </a>
+          )
+        }
+        <a href={`/${lang}/products/allproducts`} class="hover:text-red-400 transition">Productos</a>
         <a href={`/${lang}/products/offer`} class="hover:text-red-400 transition">Ofertas</a>
       </nav>
 
       <div class="flex items-center gap-4">
-        <!-- Buscador -->
+        {/* Search bar - desktop version */}
         <div
           class="flex items-center gap-2 border border-slate-300 bg-slate-900 dark:border-slate-600 rounded overflow-hidden bg-slate-200 dark:bg-slate-800 px-2 py-1 transition-colors duration-300"
+          role="search"
         >
           <button aria-label="Buscar" class="hover:opacity-75 transition flex-shrink-0">
             <img
@@ -49,9 +95,9 @@ const { cartCount = 0, lang } = Astro.props;
           />
         </div>
 
-        <!-- Cuenta -->
+        {/* Account menu dropdown - desktop */}
         <div class="relative">
-          <button id="account-toggle" aria-label="Cuenta" class="hover:opacity-75 transition">
+          <button id="account-toggle" aria-label="Cuenta" aria-expanded="false" class="hover:opacity-75 transition">
             <img
               src="/assets/Icons/dark/account.png"
               class="w-10 h-10 dark:hidden rounded-full"
@@ -66,26 +112,18 @@ const { cartCount = 0, lang } = Astro.props;
           <div
             id="account-menu"
             class="hidden absolute right-0 mt-2 w-48 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg z-50 bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
+            role="menu"
           >
-            <a
-              href={`/${lang}/acount/profile`}
-              class="block px-4 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
-              >Perfil</a
-            >
-            <hr class="border-t border-slate-200 dark:border-slate-700 my-1" />
-            <a
-              href={`/${lang}/acount/logout`}
-              class="block px-4 py-2 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
-              >Cerrar Sesión</a
-            >
+            <AccountMenu client:load lang={lang} />
           </div>
         </div>
 
-        <!-- Carrito -->
+        {/* Cart dropdown - desktop */}
         <div class="relative">
           <button
             id="cart-toggle"
             aria-label="Carrito"
+            aria-expanded="false"
             class="hover:opacity-75 transition relative"
           >
             <img src="/assets/Icons/dark/cart.png" class="w-10 h-10 dark:hidden" alt="cart light" />
@@ -105,59 +143,74 @@ const { cartCount = 0, lang } = Astro.props;
           <div
             id="cart-menu"
             class="hidden absolute right-0 mt-2 w-64 bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg z-50 bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
+            role="menu"
           >
             <p class="px-4 py-2 dark:text-slate-100">Tu carrito tiene {cartCount} artículo(s)</p>
             <hr class="border-t border-slate-300 dark:border-slate-600 my-1" />
             <a
               href={`/${lang}/products/cart`}
               class="block px-4 hover:bg-slate-800 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
-              >Ver carrito</a
+              role="menuitem"
             >
+              Ver carrito
+            </a>
             <hr class="border-t border-slate-300 dark:border-slate-600 my-1" />
             <a
               href={`/${lang}/products/checkout`}
               class="block px-4 hover:bg-slate-800 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
-              >Finalizar compra</a
+              role="menuitem"
             >
+              Finalizar compra
+            </a>
           </div>
         </div>
 
-        <!-- Theme toggle -->
-        <ThemeToggle client:load id="theme-toggle" />
+        {/* Theme toggle button */}
+        <ThemeToggle client:load />
       </div>
     </div>
 
+    {/* Mobile header (visible only on mobile) */}
     <div class="flex items-center gap-4 md:hidden">
-      <ThemeToggle client:load id="theme-toggle" />
-      <!-- BOTÓN MENÚ MÓVIL -->
-      <button id="mobile-toggle" class="text-2xl" aria-label="Abrir menú">☰</button>
+      <ThemeToggle client:load />
+      {/* Mobile menu hamburger button */}
+      <button id="mobile-toggle" class="text-2xl" aria-label="Abrir menú" aria-expanded="false">☰</button>
     </div>
   </div>
 
-  <!-- MENÚ MÓVIL COMPLETO -->
+  {/* MOBILE NAVIGATION MENU (hidden by default, toggled with hamburger) */}
   <nav
     id="mobile-menu"
     class="md:hidden hidden flex-col gap-4 px-4 py-4 bg-slate-900 text-white border-sky-100 dark:border-slate-600 border-t bg-sky-50 dark:bg-slate-950 transition-colors duration-300"
   >
+    {/* Quick links section */}
     <div class="flex items-center gap-4">
-      <p class=" dark:text-slate-100">Enlaces rapidos:</p>
+      <p class="dark:text-slate-100">Enlaces rapidos:</p>
+      {
+        home && (
+          <a href={`/${lang}/`} class="hover:text-red-400 transition">
+            Inicio
+          </a>
+        )
+      }
       <a
         href={`/${lang}/products/allproducts`}
-        class=" dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition py-2"
+        class="dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition py-2"
       >
         Productos
       </a>
       <a
         href={`/${lang}/products/offer`}
-        class=" dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition py-2"
+        class="dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition py-2"
       >
         Ofertas
       </a>
     </div>
 
-    <!-- Buscador -->
+    {/* Mobile search bar */}
     <div
       class="flex items-center gap-2 border bg-slate-900 border-slate-300 dark:border-slate-600 rounded overflow-hidden px-2 py-1 mt-2 bg-slate-200 dark:bg-slate-800 transition-colors duration-300"
+      role="search"
     >
       <button aria-label="Buscar" class="hover:opacity-75 transition flex-shrink-0">
         <img src="/assets/Icons/dark/search.png" class="w-8 h-8 dark:hidden" alt="search light" />
@@ -170,15 +223,16 @@ const { cartCount = 0, lang } = Astro.props;
       <input
         type="text"
         placeholder="Buscar Categorias"
-        class="flex-1 bg-transparent  dark:text-slate-100 dark:placeholder-slate-400 focus:outline-none px-2 py-1 text-sm"
+        class="flex-1 bg-transparent dark:text-slate-100 dark:placeholder-slate-400 focus:outline-none px-2 py-1 text-sm"
       />
     </div>
 
-    <!-- Cuenta móvil -->
+    {/* Mobile account dropdown */}
     <div class="relative mt-2">
       <button
         id="account-toggle-mobile"
         aria-label="Cuenta"
+        aria-expanded="false"
         class="hover:opacity-75 bg-slate-900 transition w-full text-left py-2 px-2 border border-slate-300 dark:border-slate-600 rounded dark:text-slate-100"
       >
         Cuenta
@@ -186,26 +240,18 @@ const { cartCount = 0, lang } = Astro.props;
       <div
         id="account-menu-mobile"
         class="hidden mt-1 w-full border border-slate-300 bg-slate-900 dark:border-slate-600 rounded-md shadow-lg z-50 bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
+        role="menu"
       >
-        <a
-          href={`/${lang}/acount/profile`}
-          class="block px-4 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
-          >Perfil</a
-        >
-        <hr class="border-t border-slate-300 dark:border-slate-600 my-1" />
-        <a
-          href={`/${lang}/acount/logout`}
-          class="block px-4 py-2  dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
-          >Cerrar Sesión</a
-        >
+        <AccountMenu client:load lang={lang} />
       </div>
     </div>
 
-    <!-- Carrito móvil -->
+    {/* Mobile cart dropdown */}
     <div class="relative mt-2">
       <button
         id="cart-toggle-mobile"
         aria-label="Carrito"
+        aria-expanded="false"
         class="hover:opacity-75 transition w-full text-left py-2 px-2 border border-slate-300 dark:border-slate-600 rounded text-white bg-slate-900 dark:text-slate-100"
       >
         Carrito ({cartCount})
@@ -213,6 +259,7 @@ const { cartCount = 0, lang } = Astro.props;
       <div
         id="cart-menu-mobile"
         class="hidden mt-1 w-full border border-slate-300 bg-slate-900 dark:border-slate-600 rounded-md shadow-lg z-50 bg-slate-50 dark:bg-slate-900 transition-colors duration-300"
+        role="menu"
       >
         <p class="px-4 py-2 dark:text-slate-100">
           Tu carrito tiene {cartCount} artículo(s)
@@ -221,50 +268,72 @@ const { cartCount = 0, lang } = Astro.props;
         <a
           href={`/${lang}/products/cart`}
           class="block px-4 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
-          >Ver carrito</a
+          role="menuitem"
         >
+          Ver carrito
+        </a>
         <hr class="border-t border-slate-300 dark:border-slate-600 my-1" />
         <a
           href={`/${lang}/products/checkout`}
           class="block px-4 py-2 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-300"
-          >Finalizar compra</a
+          role="menuitem"
         >
+          Finalizar compra
+        </a>
       </div>
     </div>
   </nav>
 
-  <!-- SCRIPT -->
+  {/* DROPDOWN & MENU TOGGLE SCRIPT */}
   <script is:inline>
-    const lang = document.documentElement.lang || 'es';
+    const lang = document.documentElement.lang || "es";
 
-    // Menú móvil
+    /**
+     * Mobile menu toggle
+     * Shows/hides full mobile menu on hamburger button click
+     */
     const mobileToggle = document.getElementById("mobile-toggle");
     const mobileMenu = document.getElementById("mobile-menu");
     mobileToggle?.addEventListener("click", (e) => {
       e.stopPropagation();
       mobileMenu.classList.toggle("hidden");
+      mobileToggle.setAttribute("aria-expanded", mobileMenu.classList.contains("hidden") ? "false" : "true");
     });
 
-    // Dropdown desktop
+    /**
+     * Desktop account menu dropdown
+     * Shows account menu if logged in, redirects to login page if not
+     */
     const accountToggle = document.getElementById("account-toggle");
     const accountMenu = document.getElementById("account-menu");
     accountToggle?.addEventListener("click", (e) => {
       e.stopPropagation();
       if (localStorage.getItem("login") !== "true") {
+        // Redirect to login page if not authenticated
         window.location.href = `/${lang}/acount/login`;
       } else {
+        // Show/hide account dropdown
         accountMenu.classList.toggle("hidden");
+        accountToggle.setAttribute("aria-expanded", accountMenu.classList.contains("hidden") ? "false" : "true");
       }
     });
 
+    /**
+     * Desktop cart menu dropdown
+     * Shows cart summary with quick links to cart and checkout
+     */
     const cartToggle = document.getElementById("cart-toggle");
     const cartMenu = document.getElementById("cart-menu");
     cartToggle?.addEventListener("click", (e) => {
       e.stopPropagation();
       cartMenu.classList.toggle("hidden");
+      cartToggle.setAttribute("aria-expanded", cartMenu.classList.contains("hidden") ? "false" : "true");
     });
 
-    // Dropdown móvil
+    /**
+     * Mobile account menu dropdown
+     * Same behavior as desktop but for mobile version
+     */
     const accountToggleMobile = document.getElementById("account-toggle-mobile");
     const accountMenuMobile = document.getElementById("account-menu-mobile");
     accountToggleMobile?.addEventListener("click", (e) => {
@@ -273,56 +342,82 @@ const { cartCount = 0, lang } = Astro.props;
         window.location.href = `/${lang}/acount/login`;
       } else {
         accountMenuMobile.classList.toggle("hidden");
+        accountToggleMobile.setAttribute("aria-expanded", accountMenuMobile.classList.contains("hidden") ? "false" : "true");
       }
     });
 
+    /**
+     * Mobile cart menu dropdown
+     * Same behavior as desktop but for mobile version
+     */
     const cartToggleMobile = document.getElementById("cart-toggle-mobile");
     const cartMenuMobile = document.getElementById("cart-menu-mobile");
     cartToggleMobile?.addEventListener("click", (e) => {
       e.stopPropagation();
       cartMenuMobile.classList.toggle("hidden");
+      cartToggleMobile.setAttribute("aria-expanded", cartMenuMobile.classList.contains("hidden") ? "false" : "true");
     });
 
-    // Cerrar solo el dropdown al hacer click en un enlace dentro del menú móvil
+    /**
+     * Close mobile account menu when link is clicked
+     * Automatically collapses dropdown after navigation
+     */
     const accountLinksM = accountMenuMobile?.querySelectorAll("a");
     accountLinksM?.forEach((link) => {
       link.addEventListener("click", () => {
         accountMenuMobile?.classList.add("hidden");
+        accountToggleMobile?.setAttribute("aria-expanded", "false");
       });
     });
 
+    /**
+     * Close mobile cart menu when link is clicked
+     * Automatically collapses dropdown after navigation
+     */
     const cartLinksM = cartMenuMobile?.querySelectorAll("a");
     cartLinksM?.forEach((link) => {
       link.addEventListener("click", () => {
         cartMenuMobile?.classList.add("hidden");
+        cartToggleMobile?.setAttribute("aria-expanded", "false");
       });
     });
 
-    // Cerrar menús solo si el click es fuera
+    /**
+     * Close dropdowns when clicking outside
+     * Click detection system that closes menus when user clicks elsewhere
+     * Excludes: search inputs, theme toggle, header element (to avoid closing on internal clicks)
+     */
     document.addEventListener("click", (e) => {
       const target = e.target;
 
-      // === NO cerrar si toca buscador móvil o desktop ===
+      // Don't close if clicking on search field
       if (target.closest("input") || target.closest("button[aria-label='Buscar']")) {
         return;
       }
 
-      // === NO cerrar si toca ThemeToggle ===
+      // Don't close if clicking on theme toggle
       if (target.closest("#theme-toggle") || target.closest(".theme-toggle")) {
         return;
       }
 
-      // === NO cerrar si toca el header completo ===
+      // Don't close if clicking anywhere in header
       if (target.closest("header")) {
         return;
       }
 
-      // === SI llega aquí, cerrar todos los menús ===
+      // Close all menus if click is outside header
       accountMenu?.classList.add("hidden");
       cartMenu?.classList.add("hidden");
       accountMenuMobile?.classList.add("hidden");
       cartMenuMobile?.classList.add("hidden");
       mobileMenu?.classList.add("hidden");
+      
+      // Update aria-expanded attributes
+      accountToggle?.setAttribute("aria-expanded", "false");
+      cartToggle?.setAttribute("aria-expanded", "false");
+      accountToggleMobile?.setAttribute("aria-expanded", "false");
+      cartToggleMobile?.setAttribute("aria-expanded", "false");
+      mobileToggle?.setAttribute("aria-expanded", "false");
     });
   </script>
 </header>
