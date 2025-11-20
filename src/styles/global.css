@@ -1,29 +1,40 @@
+/**
+ * Global CSS - Base styles for the entire application
+ * 
+ * This file sets up the fundamental styling using Tailwind CSS with custom 
+ * responsive design and dark mode support across the entire application.
+ * It ensures the HTML and body elements take full height, apply flexbox layout,
+ * and handle smooth transitions for theme switching.
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Layer base: defines fundamental styles for HTML elements */
 @layer base {
+  /* Root elements: set full height and width with no margins/padding */
   html, body {
     @apply h-full w-full m-0 p-0;
   }
 
+  /* HTML: light background with smooth scrolling and theme transition */
   html {
-    @apply scroll-smooth bg-sky-50 text-slate-900 transition-colors duration-300;
+    @apply scroll-smooth bg-sky-50 dark:bg-slate-950 transition-colors duration-300;
   }
 
   html.dark {
     @apply bg-slate-950 text-slate-50 transition-colors duration-300;
   }
 
+  /* Body: flexbox column layout with full height and theme-aware colors */
+  /* This creates a vertical layout that stretches to fill viewport height */
   body {
-    @apply flex flex-col bg-sky-50 text-slate-900 transition-colors duration-300;
+    @apply h-full w-full m-0 p-0 flex flex-col bg-sky-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50 transition-colors duration-300;
   }
 
-  body.dark {
-    @apply bg-slate-950 text-slate-50 transition-colors duration-300;
-  }
-
-  /* Asegurar que todos los elementos transicionen suavemente */
+  /* Universal selector: smooth color transitions for all elements (300ms) */
+  /* This ensures consistent animation when switching between light/dark themes */
   * {
     @apply transition-colors duration-300;
   }
