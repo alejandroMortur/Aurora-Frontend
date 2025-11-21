@@ -1,3 +1,10 @@
+/**
+ * eslint.config.js
+ * Purpose: ESLint configuration for the repository. It composes the
+ * recommended JS rules, Prettier integration and adds specific rules
+ * and parser setup for Astro files and accessibility plugins for JSX.
+ */
+
 import js from "@eslint/js";
 import prettier from "eslint-config-prettier";
 import astro from "eslint-plugin-astro";

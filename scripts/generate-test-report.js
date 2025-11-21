@@ -2,8 +2,10 @@
 
 /**
  * generate-test-report.js
- * Script para generar reporte con estadísticas básicas de los tests
- * Versión 1.0 - Reporte compacto
+ * Purpose: Small utility script that runs specific test suites,
+ * captures pass/fail counts and writes a compact report file with
+ * basic statistics (date, Node version, totals). Intended for
+ * quick CLI inspection and lightweight CI summaries.
  */
 
 import { execSync } from 'child_process';

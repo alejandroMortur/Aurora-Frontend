@@ -1,11 +1,36 @@
 ---
-import ChatbotLoader from '@/components/ui/ChatbotLoader.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// src/pages/index.astro
 ---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <script type="module">
+      async function redirectByLang() {
+        try {
+          // 1️⃣ Detectamos el idioma del navegador
+          const userLang = navigator.language || navigator.userLanguage;
+          const shortLang = userLang.slice(0, 2); // ej. "es-ES" -> "es"
 
-<Layout>
-	<ChatbotLoader client:load />
-</Layout>
+          // 2️⃣ Traemos el JSON desde public
+          const res = await fetch("/assets/langs.json");
+          if (!res.ok) throw new Error("No se pudo cargar langs.json");
+          const langMap = await res.json();
+
+          // 3️⃣ Redirigimos según el idioma, si no existe, fallback a inglés
+          const redirectUrl = langMap[shortLang] || langMap["en"];
+          window.location.replace(redirectUrl);
+        } catch (err) {
+          console.error("Error al redirigir por idioma:", err);
+          // Fallback manual
+          window.location.replace("/en/");
+        }
+      }
+
+      redirectByLang();
+    </script>
+  </head>
+  <body>
+    <p>Redirigiendo...</p>
+  </body>
+</html>

@@ -2,8 +2,10 @@
 
 /**
  * generate-test-report-full.js
- * Script para generar reporte COMPLETO con desglose detallado de TODOS los tests
- * Versión 4.0 - Reporte exhaustivo con cada test
+ * Purpose: Exhaustive test-report generator that runs the full test
+ * suite with verbose output and writes a detailed breakdown file
+ * including per-suite timings and pass/fail statistics. Useful for
+ * deeper CI reports or manual debugging when failures occur.
  */
 
 import { execSync } from 'child_process';

@@ -1,0 +1,25 @@
+---
+import { LoginFormComponent } from "../../../components/tsx/LoginForm/LoginComponent";
+import Layout from "@/layouts/LayoutForm.astro";
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login Aurora 💖</title>
+    <link rel="stylesheet" href="/src/styles/Components/Main.css" />
+    <link rel="stylesheet" href="/src/styles/Components/Login.css" />
+  </head>
+  <body>
+    <Layout
+      lang="es"
+      title="Aurora Chat - Español"
+      description="Plataforma de chat con IA en español"
+      canonicalUrl="https://miweb.com/es/"
+      previewImage="/assets/preview.png"
+    >
+      <!-- Montamos el componente React solo en cliente -->
+      <LoginFormComponent client:load />
+    </Layout>
+  </body>
+</html>
